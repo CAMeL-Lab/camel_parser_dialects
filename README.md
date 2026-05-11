@@ -80,3 +80,21 @@ Once installed with `pip install muddler`, extract muddled files provided under 
         ```
 
     3. Unzip the file with `unzip data/CamelTB-Gumar_data.zip -data`
+
+
+
+## 📖 Citation
+If you use this model, please cite:
+
+```bibtex
+@inproceedings{Elshabrawy:2026:camelparser-dialects,
+    title = "{Parsing Arabic Dialects Revisited: New Benchmarks, Models, and Insights}",
+    author = {Ahmed Elshabrawy and
+              Go Inoue and
+              Muhammed AbuOdeh and
+              Nizar Habash} ,
+    booktitle = {Proceedings of The 7th Workshop on Open-Source Arabic Corpora and Processing Tools (OSACT)},
+    year = "2026",
+    address = "Palma, Spain"
+}
+```
