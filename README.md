@@ -22,7 +22,104 @@ Full details are available in our paper:
 
 * LAS (Labeled Attachment Score) on TEST
 * The recommended checkpoint is the **all-variety model (`MSA-EGY-GLF`)**, which provides the best overall cross-dialect performance.
-* Model weights are compatible with [CamelParser2.0](https://github.com/CAMeL-Lab/camel_parser) and [SuPar](https://github.com/yzhangcs/parser) libarary. Please refer to these libraries to run these model checkpoints. Further documentattion will be provided shortly in this repository.
+* Model weights are compatible with [CamelParser2.0](https://github.com/CAMeL-Lab/camel_parser) and [SuPar](https://github.com/yzhangcs/parser). This repository includes a CamelParser submodule and CLI wrapper for direct inference.
+
+## 🚀 CLI Inference
+
+Clone this repository with its CamelParser submodule:
+
+```bash
+git clone --recurse-submodules https://github.com/CAMeL-Lab/camel_parser_dialects.git
+cd camel_parser_dialects
+```
+
+If you already cloned the repository, initialize the submodule:
+
+```bash
+git submodule update --init --recursive
+```
+
+Create an environment and install CamelParser dependencies:
+
+```bash
+conda create -n camel-parser-dialects python=3.11.13
+conda activate camel-parser-dialects
+pip install -r camel_parser/requirements.txt
+pip install conllu
+```
+
+For raw text (`-f text`) and cleaned whitespace-tokenized text (`-f preprocessed_text`), install the default CAMeL Tools morphology and disambiguation data:
+
+```bash
+camel_data -i morphology-db-msa-r13
+camel_data -i disambig-bert-unfactored-msa
+```
+
+These CAMeL Tools data packages are not needed for `-f conll`, `-f tokenized`, or `-f tokenized_tagged`.
+
+List available model aliases:
+
+```bash
+python download_models.py --list-models
+```
+
+Download all dialect parser models:
+
+```bash
+python download_models.py
+```
+
+Download one model:
+
+```bash
+python download_models.py --model msa-egy-glf
+```
+
+The available aliases are:
+
+| Alias | Hugging Face repo |
+| --- | --- |
+| `msa` | `CAMeL-Lab/camelparser-dialects-MSA` |
+| `egy` | `CAMeL-Lab/camelparser-dialects-EGY` |
+| `glf` | `CAMeL-Lab/camelparser-dialects-GLF` |
+| `msa-egy` | `CAMeL-Lab/camelparser-dialects-MSA-EGY` |
+| `msa-glf` | `CAMeL-Lab/camelparser-dialects-MSA-GLF` |
+| `egy-glf` | `CAMeL-Lab/camelparser-dialects-EGY-GLF` |
+| `msa-egy-glf` | `CAMeL-Lab/camelparser-dialects-MSA-EGY-GLF` |
+
+The CLI also accepts `catib-` prefixed aliases, e.g., `catib-msa-egy-glf`.
+
+Parse a raw text file:
+
+```bash
+python dialect_parse_cli.py -i input.txt -f text -m msa-egy-glf > output.conllx
+```
+
+Parse a string:
+
+```bash
+python dialect_parse_cli.py -s "جامعة نيويورك تنشر أطلس." -f text -m msa-egy-glf
+```
+
+Parse cleaned, whitespace-tokenized text:
+
+```bash
+python dialect_parse_cli.py -i input_tokenized.txt -f preprocessed_text -m glf > output.conllx
+```
+
+Parse already-tokenized text without POS tagging or feature generation:
+
+```bash
+python dialect_parse_cli.py -s "جامعة نيويورك تنشر أطلس ." -f tokenized -m egy
+```
+
+Parse an existing CoNLL/CoNLL-X file:
+
+```bash
+python dialect_parse_cli.py -i input.conllx -f conll -m msa-egy > output.conllx
+```
+
+The CLI downloads the selected model from Hugging Face if it is not already present under `models/`.
 
 ## 📚Data
 
